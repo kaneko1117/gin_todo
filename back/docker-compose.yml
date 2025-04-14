@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  dev-postgres:
+    container_name: gin_todo_db
+    image: postgres:15.1-alpine
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: aiful
+      POSTGRES_PASSWORD: aiful8515
+      POSTGRES_DB: gin_todo_db
+    restart: always
+    networks:
+      - proxynet
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  nginx:
+    container_name: gin-todo-nginx
+    build:
+      context: .
+      dockerfile: containers/nginx/Dockerfile
+    ports:
+      - 80:80
+    # docker network
+    networks:
+      - proxynet
+  mail:
+    container_name: mail
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+networks:
+  proxynet:
+    name: testnet
+    external: false
+
+volumes:
+  # ホスト上にデータを保存するための設定
+  pgdata:
+    driver: local
