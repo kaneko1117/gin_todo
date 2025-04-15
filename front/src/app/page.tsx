@@ -1,8 +1,5 @@
-import { From } from "@/features/Form";
-
+import { Form } from "@/features/Form";
 
 export default function Login() {
-  return (
-    <From />
-  );
+  return <Form />;
 }
