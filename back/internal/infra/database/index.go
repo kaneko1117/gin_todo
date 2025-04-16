@@ -24,7 +24,7 @@ func NewDB() *gorm.DB {
 	}
 
 	g := gen.NewGenerator(gen.Config{
-		OutPath:           "./query",
+		OutPath:           "./internal/infra/query", 
 		Mode:              gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
 		FieldWithIndexTag: true,
 		FieldWithTypeTag:  true,
