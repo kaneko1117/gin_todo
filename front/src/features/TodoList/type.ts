@@ -1,5 +1,5 @@
-export type todoData = {
-  id: number;
+export type TodoData = {
+  id: string;
   task: string;
   checked: boolean;
 }[];

@@ -2,10 +2,10 @@
 
 import { Checkbox } from "@/components/checkbox";
 import { checkedTodoList } from "@/app/action";
-import { todoData } from "../type";
+import { TodoData } from "../type";
 
 type Props = {
-  data: todoData;
+  data: TodoData;
 };
 
 export const TodoCheckBox = ({ data }: Props) => {
@@ -15,7 +15,7 @@ export const TodoCheckBox = ({ data }: Props) => {
         return (
           <div key={item.id} className="flex items-center gap-2">
             <Checkbox
-              id={item.task}
+              id={item.id}
               checked={item.checked}
               onCheckedChange={async (isCheck) => {
                 if (typeof isCheck !== "boolean") return;

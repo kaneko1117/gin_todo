@@ -1,9 +1,9 @@
-import { todoData } from "./type";
+import { TodoData } from "./type";
 import { TodoListForm } from "./components/TodoListForm";
 import { TodoCheckBox } from "./components/TodoCheckBox";
 
 type Props = {
-  data: todoData;
+  data: TodoData;
 };
 
 export const TodoList = ({ data }: Props) => {

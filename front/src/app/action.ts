@@ -24,7 +24,8 @@ export async function registerTodoList(
   return { message: "タスクを登録しました" };
 }
 
-export async function checkedTodoList(id: number, checked: boolean) {
+export async function checkedTodoList(id: string, checked: boolean) {
   // ここでDBに登録する処理を実装する
+  console.log("checkedTodoList", id, checked);
   return { message: "タスクを登録しました" };
 }
