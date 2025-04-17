@@ -17,17 +17,20 @@ import (
 
 var (
 	Q    = new(Query)
+	Task *task
 	User *user
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	Task = &Q.Task
 	User = &Q.User
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:   db,
+		Task: newTask(db, opts...),
 		User: newUser(db, opts...),
 	}
 }
@@ -35,6 +38,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 type Query struct {
 	db *gorm.DB
 
+	Task task
 	User user
 }
 
@@ -43,6 +47,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:   db,
+		Task: q.Task.clone(db),
 		User: q.User.clone(db),
 	}
 }
@@ -58,16 +63,19 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:   db,
+		Task: q.Task.replaceDB(db),
 		User: q.User.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
+	Task ITaskDo
 	User IUserDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		Task: q.Task.WithContext(ctx),
 		User: q.User.WithContext(ctx),
 	}
 }
