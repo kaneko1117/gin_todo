@@ -17,7 +17,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"gin_todo/internal/infra/model"
+	"gin_todo/internal/entity/model"
 )
 
 func newUser(db *gorm.DB, opts ...gen.DOOption) user {

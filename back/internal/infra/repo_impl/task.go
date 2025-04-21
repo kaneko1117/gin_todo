@@ -2,8 +2,8 @@ package repo_impl
 
 import (
 	"errors"
-	"gin_todo/internal/infra/model"
-	"gin_todo/internal/infra/query"
+	"gin_todo/internal/entity/model"
+	"gin_todo/internal/entity/query"
 
 	"gorm.io/gorm"
 )

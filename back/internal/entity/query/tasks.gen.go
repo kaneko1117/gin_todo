@@ -17,7 +17,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"gin_todo/internal/infra/model"
+	"gin_todo/internal/entity/model"
 )
 
 func newTask(db *gorm.DB, opts ...gen.DOOption) task {
