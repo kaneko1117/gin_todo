@@ -8,11 +8,37 @@ import (
 	"context"
 	"fmt"
 	"gin_todo/graph/model"
+	"gin_todo/internal/handler/dto/request"
+	"strconv"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // CreateTask is the resolver for the createTask field.
-func (r *mutationResolver) CreateTask(ctx context.Context, data model.Todo) (*model.Error, error) {
-	panic(fmt.Errorf("not implemented: CreateTask - createTask"))
+func (r *mutationResolver) CreateTask(ctx context.Context, data model.Todo) (*model.Error,error) {
+	intID, err:= strconv.ParseInt(data.ID, 10, 32)
+	if err != nil {
+		return &model.Error{
+			Message: fmt.Sprintf("ID is not a number: %s", data.ID),
+		},fmt.Errorf("ID is not a number: %s", data.ID)
+	}
+	v := validator.New()
+	dto := request.CreateTaskRequest{
+		UserID: int32(intID),
+		Tasks:  data.Tasks,
+	}
+	if err := v.Struct(dto); err != nil {
+		return &model.Error{
+			Message: fmt.Sprintf("Validation error: %s", err.Error()),
+		},fmt.Errorf("Validation error: %s", err.Error())
+	}
+	err = r.TaskUseCase.CreateTask(dto.UserID, dto.Tasks)
+	if err != nil {
+		return &model.Error{
+			Message: fmt.Sprintf("Create task error: %s", err.Error()),
+		},fmt.Errorf("Create task error: %s", err.Error())
+	}
+	return nil,nil
 }
 
 // Mutation returns MutationResolver implementation.

@@ -2,6 +2,9 @@ package main
 
 import (
 	"gin_todo/graph"
+	"gin_todo/internal/infra/database"
+	"gin_todo/internal/infra/repo_impl"
+	"gin_todo/internal/usecase"
 	"log"
 	"net/http"
 	"os"
@@ -21,8 +24,11 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
-
-	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	db := database.NewDB()
+	taskRepo := repo_impl.NewTaskRepo(db)
+	taskUseCase := usecase.NewTaskUseCase(taskRepo)
+	resolver := graph.NewResolver(taskUseCase)
+	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
