@@ -7,9 +7,7 @@ import "gin_todo/internal/usecase"
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
-
-
-type Resolver struct{
+type Resolver struct {
 	TaskUseCase usecase.ITaskUseCase
 }
 

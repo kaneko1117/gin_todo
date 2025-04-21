@@ -7,21 +7,22 @@ import (
 )
 
 type ITaskUseCase interface {
-	CreateTask(userID int32, tasks string) (error)
+	CreateTask(userID int32, tasks string) error
 }
 
 type TaskUseCase struct {
 	taskRepository repo_impl.ITaskRepo
 }
+
 func NewTaskUseCase(taskRepository repo_impl.ITaskRepo) ITaskUseCase {
 	return &TaskUseCase{
 		taskRepository: taskRepository,
 	}
 }
-func (u *TaskUseCase) CreateTask(userID int32, tasks string) (error) {
+func (u *TaskUseCase) CreateTask(userID int32, tasks string) error {
 	task := model.Task{
-		UserID: userID,
-		Tasks:  tasks,
+		UserID:    userID,
+		Tasks:     tasks,
 		UpdatedAt: time.Now(),
 		CreatedAt: time.Now(),
 	}

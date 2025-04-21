@@ -8,17 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-
-
-
-
 type ITaskRepo interface {
-	CreateTask(t model.Task) (error)
+	CreateTask(t model.Task) error
 }
 
 type TaskRepo struct {
 	db *gorm.DB
-	q *query.Query
+	q  *query.Query
 }
 
 func NewTaskRepo(db *gorm.DB) ITaskRepo {
@@ -29,7 +25,7 @@ func NewTaskRepo(db *gorm.DB) ITaskRepo {
 	}
 }
 
-func (r *TaskRepo) CreateTask(t model.Task) (error) {
+func (r *TaskRepo) CreateTask(t model.Task) error {
 	q := r.q
 	err := q.Task.Create(&t)
 	if err != nil {

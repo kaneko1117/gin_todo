@@ -12,7 +12,7 @@ const TableNameTask = "tasks"
 
 // Task mapped from table <tasks>
 type Task struct {
-	ID        int32     `gorm:"column:id;type:integer;primaryKey" json:"id"`
+	ID        int32     `gorm:"column:id;type:integer;primaryKey;autoIncrement:true" json:"id"`
 	Tasks     string    `gorm:"column:tasks;type:text;not null" json:"tasks"`
 	CreatedAt time.Time `gorm:"column:created_at;type:timestamp(0) with time zone;not null" json:"created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at;type:timestamp(0) with time zone;not null" json:"updated_at"`
