@@ -2,8 +2,8 @@
 
 package model
 
-type Error struct {
-	Message string `json:"message"`
+type Message struct {
+	Msg string `json:"msg"`
 }
 
 type Mutation struct {

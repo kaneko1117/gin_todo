@@ -3,7 +3,7 @@
 # https://gqlgen.com/getting-started/
 
 type Mutation {
-  createTask(data: Todo!): Error!
+  createTask(data: Todo!): Message!
 }
 
 input Todo {
@@ -11,6 +11,6 @@ input Todo {
   tasks: String!
 }
 
-type Error {
-  message: String!
+type Message {
+  msg: String!
 }

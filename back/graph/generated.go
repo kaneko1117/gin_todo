@@ -46,8 +46,8 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	Error struct {
-		Message func(childComplexity int) int
+	Message struct {
+		Msg func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -59,7 +59,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateTask(ctx context.Context, data model.Todo) (*model.Error, error)
+	CreateTask(ctx context.Context, data model.Todo) (*model.Message, error)
 }
 
 type executableSchema struct {
@@ -81,12 +81,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Error.message":
-		if e.complexity.Error.Message == nil {
+	case "Message.msg":
+		if e.complexity.Message.Msg == nil {
 			break
 		}
 
-		return e.complexity.Error.Message(childComplexity), true
+		return e.complexity.Message.Msg(childComplexity), true
 
 	case "Mutation.createTask":
 		if e.complexity.Mutation.CreateTask == nil {
@@ -371,8 +371,8 @@ func (ec *executionContext) field___Type_fields_argsIncludeDeprecated(
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Error_message(ctx context.Context, field graphql.CollectedField, obj *model.Error) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Error_message(ctx, field)
+func (ec *executionContext) _Message_msg(ctx context.Context, field graphql.CollectedField, obj *model.Message) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Message_msg(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -385,7 +385,7 @@ func (ec *executionContext) _Error_message(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Message, nil
+		return obj.Msg, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -402,9 +402,9 @@ func (ec *executionContext) _Error_message(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Error_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Message_msg(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Error",
+		Object:     "Message",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -441,9 +441,9 @@ func (ec *executionContext) _Mutation_createTask(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Error)
+	res := resTmp.(*model.Message)
 	fc.Result = res
-	return ec.marshalNError2ᚖgin_todoᚋgraphᚋmodelᚐError(ctx, field.Selections, res)
+	return ec.marshalNMessage2ᚖgin_todoᚋgraphᚋmodelᚐMessage(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createTask(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -454,10 +454,10 @@ func (ec *executionContext) fieldContext_Mutation_createTask(ctx context.Context
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "message":
-				return ec.fieldContext_Error_message(ctx, field)
+			case "msg":
+				return ec.fieldContext_Message_msg(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Error", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Message", field.Name)
 		},
 	}
 	defer func() {
@@ -2598,19 +2598,19 @@ func (ec *executionContext) unmarshalInputTodo(ctx context.Context, obj any) (mo
 
 // region    **************************** object.gotpl ****************************
 
-var errorImplementors = []string{"Error"}
+var messageImplementors = []string{"Message"}
 
-func (ec *executionContext) _Error(ctx context.Context, sel ast.SelectionSet, obj *model.Error) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, errorImplementors)
+func (ec *executionContext) _Message(ctx context.Context, sel ast.SelectionSet, obj *model.Message) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, messageImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("Error")
-		case "message":
-			out.Values[i] = ec._Error_message(ctx, field, obj)
+			out.Values[i] = graphql.MarshalString("Message")
+		case "msg":
+			out.Values[i] = ec._Message_msg(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -3086,20 +3086,6 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNError2gin_todoᚋgraphᚋmodelᚐError(ctx context.Context, sel ast.SelectionSet, v model.Error) graphql.Marshaler {
-	return ec._Error(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNError2ᚖgin_todoᚋgraphᚋmodelᚐError(ctx context.Context, sel ast.SelectionSet, v *model.Error) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Error(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v any) (string, error) {
 	res, err := graphql.UnmarshalID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -3113,6 +3099,20 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNMessage2gin_todoᚋgraphᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v model.Message) graphql.Marshaler {
+	return ec._Message(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMessage2ᚖgin_todoᚋgraphᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v *model.Message) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Message(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
