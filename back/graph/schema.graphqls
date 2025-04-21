@@ -2,7 +2,15 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
+type Mutation {
+  createTask(data: Todo!): Error!
+}
+
+input Todo {
   id: ID!
   tasks: String!
+}
+
+type Error {
+  message: String!
 }
