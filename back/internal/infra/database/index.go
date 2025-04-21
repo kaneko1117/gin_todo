@@ -7,8 +7,6 @@ import (
 	"time"
 
 	"gorm.io/driver/postgres"
-	"gorm.io/gen"
-	"gorm.io/gen/field"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -23,14 +21,6 @@ func NewDB() *gorm.DB {
 			log.Fatalln(err)
 		}
 	}
-
-	g := gen.NewGenerator(gen.Config{
-		OutPath:           "./internal/entity/query", 
-		Mode:              gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
-		FieldWithIndexTag: true,
-		FieldWithTypeTag:  true,
-		FieldNullable:     true,
-	})
 
 
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("POSTGRES_USER"),
@@ -59,18 +49,6 @@ func NewDB() *gorm.DB {
 	}
 
 	fmt.Println("DB接続成功")
-
-	g.UseDB(db)
-	tasksModel := g.GenerateModel("tasks")
-	usersModel := g.GenerateModel("users",gen.FieldRelate(field.HasMany,"Tasks",tasksModel,&field.RelateConfig{
-		GORMTag: field.GormTag{"foreignKey": []string{"UserID"},
-
-	},
-	}))
-
-	g.ApplyBasic(tasksModel, usersModel)
-
-	g.Execute()
 
 	return db
 }
