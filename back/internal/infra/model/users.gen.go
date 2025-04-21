@@ -16,7 +16,8 @@ type User struct {
 	UserName  string    `gorm:"column:user_name;type:character varying(191);not null" json:"user_name"`
 	Password  string    `gorm:"column:password;type:text;not null" json:"password"`
 	CreatedAt time.Time `gorm:"column:created_at;type:timestamp(0) with time zone;not null" json:"created_at"`
-	UpdateAt  time.Time `gorm:"column:update_at;type:timestamp(0) with time zone;not null" json:"update_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at;type:timestamp(0) with time zone;not null" json:"updated_at"`
+	Tasks     []Task    `gorm:"foreignKey:UserID" json:"tasks"`
 }
 
 // TableName User's table name

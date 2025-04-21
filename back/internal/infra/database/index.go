@@ -8,6 +8,7 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gen"
+	"gorm.io/gen/field"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -60,9 +61,14 @@ func NewDB() *gorm.DB {
 	fmt.Println("DB接続成功")
 
 	g.UseDB(db)
-	all := g.GenerateAllTable()
+	tasksModel := g.GenerateModel("tasks")
+	usersModel := g.GenerateModel("users",gen.FieldRelate(field.HasMany,"Tasks",tasksModel,&field.RelateConfig{
+		GORMTag: field.GormTag{"foreignKey": []string{"UserID"},
 
-	g.ApplyBasic(all...)
+	},
+	}))
+
+	g.ApplyBasic(tasksModel, usersModel)
 
 	g.Execute()
 

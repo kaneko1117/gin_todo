@@ -15,7 +15,8 @@ type Task struct {
 	ID        int32     `gorm:"column:id;type:integer;primaryKey" json:"id"`
 	Tasks     string    `gorm:"column:tasks;type:text;not null" json:"tasks"`
 	CreatedAt time.Time `gorm:"column:created_at;type:timestamp(0) with time zone;not null" json:"created_at"`
-	UpdateAt  time.Time `gorm:"column:update_at;type:timestamp(0) with time zone;not null" json:"update_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at;type:timestamp(0) with time zone;not null" json:"updated_at"`
+	UserID    int32     `gorm:"column:user_id;type:integer;not null" json:"user_id"`
 }
 
 // TableName Task's table name
