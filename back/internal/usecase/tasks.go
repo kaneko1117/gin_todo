@@ -8,6 +8,7 @@ import (
 
 type ITaskUseCase interface {
 	CreateTask(userID int32, tasks string) error
+	GetTasks(userID int32) ([]*model.Task, error)
 }
 
 type TaskUseCase struct {
@@ -31,4 +32,12 @@ func (u *TaskUseCase) CreateTask(userID int32, tasks string) error {
 		return err
 	}
 	return nil
+}
+
+func (u *TaskUseCase) GetTasks(userID int32) ([]*model.Task, error) {
+	tasks, err := u.taskRepository.GetTasks(userID)
+	if err != nil {
+		return nil, err
+	}
+	return tasks, nil
 }
