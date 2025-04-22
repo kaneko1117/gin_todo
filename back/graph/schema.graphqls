@@ -1,0 +1,16 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Mutation {
+  createTask(data: Todo!): Message!
+}
+
+input Todo {
+  id: ID!
+  tasks: String!
+}
+
+type Message {
+  msg: String!
+}
