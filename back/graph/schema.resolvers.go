@@ -41,7 +41,16 @@ func (r *mutationResolver) CreateTask(ctx context.Context, data model.Todo) (*mo
 	return &model.Message{Msg: "Success!"}, nil
 }
 
+// GetTasks is the resolver for the getTasks field.
+func (r *queryResolver) GetTasks(ctx context.Context, id string) ([]*model.Tasks, error) {
+	panic(fmt.Errorf("not implemented: GetTasks - getTasks"))
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }

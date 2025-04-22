@@ -14,3 +14,11 @@ input Todo {
 type Message {
   msg: String!
 }
+
+type Query {
+  getTasks(id: ID!): [Tasks!]
+}
+
+type Tasks {
+  tasks: String!
+}
