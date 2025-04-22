@@ -10,6 +10,7 @@ import (
 
 type ITaskRepo interface {
 	CreateTask(t model.Task) error
+	GetTasks(userID int32) ([]*model.Task, error)
 }
 
 type TaskRepo struct {
@@ -32,4 +33,16 @@ func (r *TaskRepo) CreateTask(t model.Task) error {
 		return errors.New("タスクの登録に失敗しました")
 	}
 	return nil
+}
+
+func (r *TaskRepo) GetTasks(userID int32) ([]*model.Task, error) {
+	q := r.q
+	tasks, err := q.Task.Where(query.Task.UserID.Eq(userID)).Find()
+	if err != nil {
+		return nil, errors.New("タスクの取得に失敗しました")
+	}
+	if len(tasks) == 0 {
+		return nil, errors.New("タスクが存在しません")
+	}
+	return tasks, nil
 }
