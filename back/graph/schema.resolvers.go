@@ -43,6 +43,7 @@ func (r *mutationResolver) CreateTask(ctx context.Context, data model.Todo) (*mo
 
 // GetTasks is the resolver for the getTasks field.
 func (r *queryResolver) GetTasks(ctx context.Context, id string) ([]*model.Tasks, error) {
+	fmt.Println("GetTasks called", id)
 	intID, err := strconv.ParseInt(id, 10, 32)
 	if err != nil {
 		return nil, fmt.Errorf("ID is not a number: %s", id)

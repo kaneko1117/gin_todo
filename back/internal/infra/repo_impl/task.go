@@ -36,8 +36,8 @@ func (r *TaskRepo) CreateTask(t model.Task) error {
 }
 
 func (r *TaskRepo) GetTasks(userID int32) ([]*model.Task, error) {
-	q := r.q
-	tasks, err := q.Task.Where(query.Task.UserID.Eq(userID)).Find()
+	var tasks []*model.Task
+	err := r.db.Where("user_id = ?", userID).Find(&tasks).Error
 	if err != nil {
 		return nil, errors.New("タスクの取得に失敗しました")
 	}
