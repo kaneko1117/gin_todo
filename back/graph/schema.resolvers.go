@@ -41,7 +41,36 @@ func (r *mutationResolver) CreateTask(ctx context.Context, data model.Todo) (*mo
 	return &model.Message{Msg: "Success!"}, nil
 }
 
+// GetTasks is the resolver for the getTasks field.
+func (r *queryResolver) GetTasks(ctx context.Context, id string) ([]*model.Tasks, error) {
+	fmt.Println("GetTasks called", id)
+	intID, err := strconv.ParseInt(id, 10, 32)
+	if err != nil {
+		return nil, fmt.Errorf("ID is not a number: %s", id)
+	}
+	tasks, err := r.TaskUseCase.GetTasks(int32(intID))
+	if err != nil {
+		return nil, fmt.Errorf("Get tasks error: %s", err.Error())
+	}
+	if len(tasks) == 0 {
+		return nil, fmt.Errorf("No tasks found for user ID: %d", intID)
+	}
+
+	// entityのTasksをGraphQLのTasksに変換
+	var result []*model.Tasks
+	for _, task := range tasks {
+		result = append(result, &model.Tasks{
+			Task: task.Tasks,
+		})
+	}
+	return result, nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }
