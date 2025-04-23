@@ -13,7 +13,7 @@ type Query struct {
 }
 
 type Tasks struct {
-	Tasks string `json:"tasks"`
+	Task string `json:"task"`
 }
 
 type Todo struct {

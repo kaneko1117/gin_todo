@@ -16,9 +16,9 @@ type Message {
 }
 
 type Query {
-  getTasks(id: ID!): [Tasks!]
+  getTasks(id: ID!): [Tasks!]!
 }
 
 type Tasks {
-  tasks: String!
+  task: String!
 }
