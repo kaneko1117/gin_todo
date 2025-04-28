@@ -26,6 +26,7 @@ func (u *TaskUseCase) CreateTask(userID int32, tasks string) error {
 		Tasks:     tasks,
 		UpdatedAt: time.Now(),
 		CreatedAt: time.Now(),
+		IsChecked: false,
 	}
 	err := u.taskRepository.CreateTask(task)
 	if err != nil {

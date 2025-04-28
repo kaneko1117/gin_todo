@@ -3,8 +3,7 @@ module gin_todo
 go 1.23.8
 
 require (
-	github.com/99designs/gqlgen v0.17.72
-	github.com/go-chi/chi v1.5.5
+	github.com/99designs/gqlgen v0.17.71
 	github.com/go-playground/validator/v10 v10.26.0
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/cors v1.11.1

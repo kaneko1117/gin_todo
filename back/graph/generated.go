@@ -60,7 +60,9 @@ type ComplexityRoot struct {
 	}
 
 	Tasks struct {
-		Task func(childComplexity int) int
+		ID        func(childComplexity int) int
+		IsChecked func(childComplexity int) int
+		Task      func(childComplexity int) int
 	}
 }
 
@@ -120,6 +122,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.GetTasks(childComplexity, args["id"].(string)), true
+
+	case "Tasks.ID":
+		if e.complexity.Tasks.ID == nil {
+			break
+		}
+
+		return e.complexity.Tasks.ID(childComplexity), true
+
+	case "Tasks.isChecked":
+		if e.complexity.Tasks.IsChecked == nil {
+			break
+		}
+
+		return e.complexity.Tasks.IsChecked(childComplexity), true
 
 	case "Tasks.task":
 		if e.complexity.Tasks.Task == nil {
@@ -566,6 +582,10 @@ func (ec *executionContext) fieldContext_Query_getTasks(ctx context.Context, fie
 			switch field.Name {
 			case "task":
 				return ec.fieldContext_Tasks_task(ctx, field)
+			case "isChecked":
+				return ec.fieldContext_Tasks_isChecked(ctx, field)
+			case "ID":
+				return ec.fieldContext_Tasks_ID(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Tasks", field.Name)
 		},
@@ -754,6 +774,94 @@ func (ec *executionContext) fieldContext_Tasks_task(_ context.Context, field gra
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Tasks_isChecked(ctx context.Context, field graphql.CollectedField, obj *model.Tasks) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Tasks_isChecked(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsChecked, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Tasks_isChecked(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Tasks",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Tasks_ID(ctx context.Context, field graphql.CollectedField, obj *model.Tasks) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Tasks_ID(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Tasks_ID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Tasks",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2925,6 +3033,16 @@ func (ec *executionContext) _Tasks(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = graphql.MarshalString("Tasks")
 		case "task":
 			out.Values[i] = ec._Tasks_task(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isChecked":
+			out.Values[i] = ec._Tasks_isChecked(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ID":
+			out.Values[i] = ec._Tasks_ID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

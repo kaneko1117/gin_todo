@@ -43,4 +43,20 @@ func main() {
 		fmt.Println("Error seeding data:", err)
 		return
 	}
+
+	taskData := model.Task{
+		UserID:    userData.ID,
+		Tasks:     "洗濯物を干す",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		IsChecked: false,
+	}
+
+	err = query.Task.Create(&taskData)
+	if err != nil {
+		fmt.Println("Error seeding data:", err)
+		return
+	}
+	fmt.Println("Seeding completed successfully.")
+
 }

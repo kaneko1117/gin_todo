@@ -157,6 +157,5 @@ models:
     model:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
-
-options:
-  explicit_requires: true
+# options:
+#   explicit_requires: true

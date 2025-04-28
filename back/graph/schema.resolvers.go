@@ -60,8 +60,11 @@ func (r *queryResolver) GetTasks(ctx context.Context, id string) ([]*model.Tasks
 	var result []*model.Tasks
 	for _, task := range tasks {
 		result = append(result, &model.Tasks{
-			Task: task.Tasks,
+			ID: 	 strconv.Itoa(int(task.ID)),
+			Task:      task.Tasks,
+			IsChecked: task.IsChecked,
 		})
+		fmt.Println("Task:", task.IsChecked)
 	}
 	return result, nil
 }

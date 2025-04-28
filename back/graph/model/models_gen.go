@@ -13,7 +13,9 @@ type Query struct {
 }
 
 type Tasks struct {
-	Task string `json:"task"`
+	Task      string `json:"task"`
+	IsChecked bool   `json:"isChecked"`
+	ID        string `json:"ID"`
 }
 
 type Todo struct {

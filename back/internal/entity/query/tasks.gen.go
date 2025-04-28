@@ -33,6 +33,7 @@ func newTask(db *gorm.DB, opts ...gen.DOOption) task {
 	_task.CreatedAt = field.NewTime(tableName, "created_at")
 	_task.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_task.UserID = field.NewInt32(tableName, "user_id")
+	_task.IsChecked = field.NewBool(tableName, "is_checked")
 
 	_task.fillFieldMap()
 
@@ -48,6 +49,7 @@ type task struct {
 	CreatedAt field.Time
 	UpdatedAt field.Time
 	UserID    field.Int32
+	IsChecked field.Bool
 
 	fieldMap map[string]field.Expr
 }
@@ -69,6 +71,7 @@ func (t *task) updateTableName(table string) *task {
 	t.CreatedAt = field.NewTime(table, "created_at")
 	t.UpdatedAt = field.NewTime(table, "updated_at")
 	t.UserID = field.NewInt32(table, "user_id")
+	t.IsChecked = field.NewBool(table, "is_checked")
 
 	t.fillFieldMap()
 
@@ -85,12 +88,13 @@ func (t *task) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (t *task) fillFieldMap() {
-	t.fieldMap = make(map[string]field.Expr, 5)
+	t.fieldMap = make(map[string]field.Expr, 6)
 	t.fieldMap["id"] = t.ID
 	t.fieldMap["tasks"] = t.Tasks
 	t.fieldMap["created_at"] = t.CreatedAt
 	t.fieldMap["updated_at"] = t.UpdatedAt
 	t.fieldMap["user_id"] = t.UserID
+	t.fieldMap["is_checked"] = t.IsChecked
 }
 
 func (t task) clone(db *gorm.DB) task {
