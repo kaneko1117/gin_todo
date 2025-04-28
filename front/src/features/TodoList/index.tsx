@@ -1,12 +1,28 @@
-import { TodoData } from "./type";
+"use client";
+
+import { gql, useQuery } from "@apollo/client";
+import { GraphQLResponse } from "./type";
 import { TodoListForm } from "./components/TodoListForm";
 import { TodoCheckBox } from "./components/TodoCheckBox";
 
-type Props = {
-  data: TodoData;
-};
+const TodosQuery = gql(`
+  query GetTasks($id : ID!) {
+    getTasks(id: $id) {
+      ID
+      task
+      isChecked
+    }
+  }
+`);
 
-export const TodoList = ({ data }: Props) => {
+export const TodoList = () => {
+  const { data, loading, error } = useQuery<GraphQLResponse>(TodosQuery, {
+    variables: {
+      id: 2,
+    },
+  });
+  if (loading || !data) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
   return (
     <div className="flex flex-col items-center gap-5 h-screen mt-12">
       <div className="w-[500px]">

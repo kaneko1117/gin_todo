@@ -3,3 +3,11 @@ export type TodoData = {
   task: string;
   checked: boolean;
 }[];
+
+export type GraphQLResponse = {
+  getTasks: {
+    ID: string;
+    task: string;
+    isChecked: boolean;
+  }[];
+};

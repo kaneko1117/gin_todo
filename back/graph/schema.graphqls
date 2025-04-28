@@ -21,4 +21,6 @@ type Query {
 
 type Tasks {
   task: String!
+  isChecked: Boolean!
+  ID: ID!
 }

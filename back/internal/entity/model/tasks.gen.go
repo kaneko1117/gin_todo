@@ -17,6 +17,7 @@ type Task struct {
 	CreatedAt time.Time `gorm:"column:created_at;type:timestamp(0) with time zone;not null" json:"created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at;type:timestamp(0) with time zone;not null" json:"updated_at"`
 	UserID    int32     `gorm:"column:user_id;type:integer;not null" json:"user_id"`
+	IsChecked bool      `gorm:"column:is_checked;type:boolean;not null" json:"is_checked"`
 }
 
 // TableName Task's table name

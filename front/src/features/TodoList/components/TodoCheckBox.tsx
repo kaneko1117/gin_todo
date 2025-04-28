@@ -2,24 +2,24 @@
 
 import { Checkbox } from "@/components/checkbox";
 import { checkedTodoList } from "@/app/action";
-import { TodoData } from "../type";
+import { GraphQLResponse } from "../type";
 
 type Props = {
-  data: TodoData;
+  data: GraphQLResponse;
 };
 
 export const TodoCheckBox = ({ data }: Props) => {
   return (
     <div className="mt-2">
-      {data.map((item) => {
+      {data.getTasks.map((item) => {
         return (
-          <div key={item.id} className="flex items-center gap-2">
+          <div key={item.ID} className="flex items-center gap-2">
             <Checkbox
-              id={item.id}
-              checked={item.checked}
+              id={item.ID}
+              checked={item.isChecked}
               onCheckedChange={async (isCheck) => {
                 if (typeof isCheck !== "boolean") return;
-                await checkedTodoList(item.id, isCheck);
+                await checkedTodoList(item.ID, isCheck);
               }}
               className="cursor-pointer"
               name="checked"
