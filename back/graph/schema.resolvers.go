@@ -64,7 +64,6 @@ func (r *queryResolver) GetTasks(ctx context.Context, id string) ([]*model.Tasks
 			Task:      task.Tasks,
 			IsChecked: task.IsChecked,
 		})
-		fmt.Println("Task:", task.IsChecked)
 	}
 	return result, nil
 }

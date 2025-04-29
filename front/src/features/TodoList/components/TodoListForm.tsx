@@ -1,26 +1,48 @@
 "use client";
-import { useActionState } from "react";
+import { gql, useMutation } from "@apollo/client";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
-import { registerTodoList } from "@/app/action";
 
-const initialState = {
-  message: "",
+const REGISTER_TASK = gql(`
+  mutation CreateTask($data: Todo!) {
+    createTask(data: $data) {
+      msg
+    }
+  }
+`);
+
+type Response = {
+  msg: string;
 };
+
 export const TodoListForm = () => {
-  const [state, formAction, pending] = useActionState(
-    registerTodoList,
-    initialState
-  );
+  const [registerTask, { loading, error }] =
+    useMutation<Response>(REGISTER_TASK);
+  const registerFormData = (formData: FormData) => {
+    const task = formData.get("task");
+    registerTask({
+      variables: {
+        data: {
+          tasks: task,
+          id: 2,
+        },
+      },
+    });
+  };
+
   return (
     <>
-      <form className="flex gap-2" action={formAction}>
+      <form className="flex gap-2" action={registerFormData}>
         <Input type="text" placeholder="タスクを追加" id="task" name="task" />
-        <Button type="submit" className="cursor-pointer" disabled={pending}>
+        <Button type="submit" className="cursor-pointer" disabled={loading}>
           追加
         </Button>
       </form>
-      <p className="h-6">{state.message}</p>
+      {error && (
+        <div className="mt-2">
+          <p className="text-red-500">登録に失敗しました</p>
+        </div>
+      )}
     </>
   );
 };
