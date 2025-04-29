@@ -9,6 +9,7 @@ import (
 type ITaskUseCase interface {
 	CreateTask(userID int32, tasks string) error
 	GetTasks(userID int32) ([]*model.Task, error)
+	ChangeTaskStatus(taskID int32, isChecked bool) error
 }
 
 type TaskUseCase struct {
@@ -41,4 +42,12 @@ func (u *TaskUseCase) GetTasks(userID int32) ([]*model.Task, error) {
 		return nil, err
 	}
 	return tasks, nil
+}
+
+func (u *TaskUseCase) ChangeTaskStatus(taskID int32, isChecked bool) error {
+	err := u.taskRepository.ChangeTaskStatus(taskID, isChecked)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -4,11 +4,17 @@
 
 type Mutation {
   createTask(data: Todo!): Message!
+  changeTaskStatus(data: ChangeStatus!): Message!
 }
 
 input Todo {
   id: ID!
   tasks: String!
+}
+
+input ChangeStatus {
+  id: ID!
+  isChecked: Boolean!
 }
 
 type Message {

@@ -2,6 +2,11 @@
 
 package model
 
+type ChangeStatus struct {
+	ID        string `json:"id"`
+	IsChecked bool   `json:"isChecked"`
+}
+
 type Message struct {
 	Msg string `json:"msg"`
 }
