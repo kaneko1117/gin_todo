@@ -41,6 +41,33 @@ func (r *mutationResolver) CreateTask(ctx context.Context, data model.Todo) (*mo
 	return &model.Message{Msg: "Success!"}, nil
 }
 
+// ChangeTaskStatus is the resolver for the changeTaskStatus field.
+func (r *mutationResolver) ChangeTaskStatus(ctx context.Context, data model.ChangeStatus) (*model.Message, error) {
+	intID, err := strconv.ParseInt(data.ID, 10, 32)
+	if err != nil {
+		return &model.Message{
+			Msg: fmt.Sprintf("ID is not a number: %s", data.ID),
+		}, fmt.Errorf("ID is not a number: %s", data.ID)
+	}
+	v := validator.New()
+	dto := request.ChangeTaskStatusRequest{
+		TaskID:   int32(intID),
+		IsChecked: data.IsChecked,
+	}
+	if err := v.Struct(dto); err != nil {
+		return &model.Message{
+			Msg: fmt.Sprintf("Validation error: %s", err.Error()),
+		}, fmt.Errorf("Validation error: %s", err.Error())
+	}
+	err = r.TaskUseCase.ChangeTaskStatus(int32(intID), data.IsChecked)
+	if err != nil {
+		return &model.Message{
+			Msg: fmt.Sprintf("Change task status error: %s", err.Error()),
+		}, fmt.Errorf("Change task status error: %s", err.Error())
+	}
+	return &model.Message{Msg: "Success!"}, nil
+}
+
 // GetTasks is the resolver for the getTasks field.
 func (r *queryResolver) GetTasks(ctx context.Context, id string) ([]*model.Tasks, error) {
 	fmt.Println("GetTasks called", id)
@@ -60,7 +87,7 @@ func (r *queryResolver) GetTasks(ctx context.Context, id string) ([]*model.Tasks
 	var result []*model.Tasks
 	for _, task := range tasks {
 		result = append(result, &model.Tasks{
-			ID: 	 strconv.Itoa(int(task.ID)),
+			ID:        strconv.Itoa(int(task.ID)),
 			Task:      task.Tasks,
 			IsChecked: task.IsChecked,
 		})

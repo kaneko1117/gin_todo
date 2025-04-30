@@ -1,14 +1,23 @@
 "use client";
 
+import { gql, useMutation } from "@apollo/client";
 import { Checkbox } from "@/components/checkbox";
-import { checkedTodoList } from "@/app/action";
 import { GraphQLResponse } from "../type";
 
 type Props = {
   data: GraphQLResponse;
 };
 
+const CHANGE_STATUS = gql(`
+  mutation ChangeTaskStatus($data: ChangeStatus!) {
+    changeTaskStatus(data: $data) {
+      msg
+    }
+  }
+`);
+
 export const TodoCheckBox = ({ data }: Props) => {
+  const [changeTaskStatus] = useMutation(CHANGE_STATUS);
   return (
     <div className="mt-2">
       {data.getTasks.map((item) => {
@@ -19,7 +28,14 @@ export const TodoCheckBox = ({ data }: Props) => {
               checked={item.isChecked}
               onCheckedChange={async (isCheck) => {
                 if (typeof isCheck !== "boolean") return;
-                await checkedTodoList(item.ID, isCheck);
+                await changeTaskStatus({
+                  variables: {
+                    data: {
+                      id: item.ID,
+                      isChecked: isCheck,
+                    },
+                  },
+                });
               }}
               className="cursor-pointer"
               name="checked"
