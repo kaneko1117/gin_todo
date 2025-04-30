@@ -8,5 +8,5 @@ type CreateTaskRequest struct {
 
 type ChangeTaskStatusRequest struct {
 	TaskID   int32 `json:"task_id" validate:"required"`
-	IsChecked bool  `json:"is_checked" validate:"required,boolean"`
+	IsChecked bool  `json:"is_checked" validate:"boolean"`
 }
