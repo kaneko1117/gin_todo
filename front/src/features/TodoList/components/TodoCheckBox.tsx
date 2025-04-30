@@ -28,7 +28,6 @@ export const TodoCheckBox = ({ data }: Props) => {
               checked={item.isChecked}
               onCheckedChange={async (isCheck) => {
                 if (typeof isCheck !== "boolean") return;
-                console.log(isCheck);
                 await changeTaskStatus({
                   variables: {
                     data: {
