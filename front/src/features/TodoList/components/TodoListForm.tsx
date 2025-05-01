@@ -1,7 +1,13 @@
 "use client";
-import { gql, useMutation } from "@apollo/client";
+import {
+  ApolloQueryResult,
+  gql,
+  OperationVariables,
+  useMutation,
+} from "@apollo/client";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
+import { GraphQLResponse } from "../type";
 
 const REGISTER_TASK = gql(`
   mutation CreateTask($data: Todo!) {
@@ -15,12 +21,18 @@ type Response = {
   msg: string;
 };
 
-export const TodoListForm = () => {
+type Props = {
+  refetch: (
+    variables?: Partial<OperationVariables> | undefined
+  ) => Promise<ApolloQueryResult<GraphQLResponse>>;
+};
+
+export const TodoListForm = ({ refetch }: Props) => {
   const [registerTask, { loading, error }] =
     useMutation<Response>(REGISTER_TASK);
-  const registerFormData = (formData: FormData) => {
+  const registerFormData = async (formData: FormData) => {
     const task = formData.get("task");
-    registerTask({
+    await registerTask({
       variables: {
         data: {
           tasks: task,
@@ -28,6 +40,7 @@ export const TodoListForm = () => {
         },
       },
     });
+    await refetch();
   };
 
   return (
