@@ -25,7 +25,7 @@ const CHANGE_STATUS = gql(`
 `);
 
 export const TodoCheckBox = ({ data, refetch }: Props) => {
-  const [changeTaskStatus] = useMutation(CHANGE_STATUS);
+  const [changeTaskStatus, { error }] = useMutation(CHANGE_STATUS);
   return (
     <div className="mt-2">
       {data.getTasks.map((item) => {
@@ -55,6 +55,7 @@ export const TodoCheckBox = ({ data, refetch }: Props) => {
           </div>
         );
       })}
+      {error && <p className="text-red-500">タスクの更新に失敗しました</p>}
     </div>
   );
 };
