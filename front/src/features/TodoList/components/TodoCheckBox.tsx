@@ -1,11 +1,19 @@
 "use client";
 
-import { gql, useMutation } from "@apollo/client";
+import {
+  ApolloQueryResult,
+  gql,
+  OperationVariables,
+  useMutation,
+} from "@apollo/client";
 import { Checkbox } from "@/components/checkbox";
 import { GraphQLResponse } from "../type";
 
 type Props = {
   data: GraphQLResponse;
+  refetch: (
+    variables?: Partial<OperationVariables> | undefined
+  ) => Promise<ApolloQueryResult<GraphQLResponse>>;
 };
 
 const CHANGE_STATUS = gql(`
@@ -16,8 +24,8 @@ const CHANGE_STATUS = gql(`
   }
 `);
 
-export const TodoCheckBox = ({ data }: Props) => {
-  const [changeTaskStatus] = useMutation(CHANGE_STATUS);
+export const TodoCheckBox = ({ data, refetch }: Props) => {
+  const [changeTaskStatus, { error }] = useMutation(CHANGE_STATUS);
   return (
     <div className="mt-2">
       {data.getTasks.map((item) => {
@@ -36,6 +44,7 @@ export const TodoCheckBox = ({ data }: Props) => {
                     },
                   },
                 });
+                await refetch();
               }}
               className="cursor-pointer"
               name="checked"
@@ -46,6 +55,7 @@ export const TodoCheckBox = ({ data }: Props) => {
           </div>
         );
       })}
+      {error && <p className="text-red-500">タスクの更新に失敗しました</p>}
     </div>
   );
 };

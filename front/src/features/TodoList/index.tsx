@@ -16,18 +16,21 @@ const TodosQuery = gql(`
 `);
 
 export const TodoList = () => {
-  const { data, loading, error } = useQuery<GraphQLResponse>(TodosQuery, {
-    variables: {
-      id: 2,
-    },
-  });
+  const { data, loading, error, refetch } = useQuery<GraphQLResponse>(
+    TodosQuery,
+    {
+      variables: {
+        id: 2,
+      },
+    }
+  );
   if (loading || !data) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   return (
     <div className="flex flex-col items-center gap-5 h-screen mt-12">
       <div className="w-[500px]">
-        <TodoListForm />
-        <TodoCheckBox data={data} />
+        <TodoListForm refetch={refetch} />
+        <TodoCheckBox data={data} refetch={refetch} />
       </div>
     </div>
   );
