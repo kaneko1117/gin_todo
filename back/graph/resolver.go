@@ -9,10 +9,12 @@ import "gin_todo/internal/usecase"
 
 type Resolver struct {
 	TaskUseCase usecase.ITaskUseCase
+	UserUseCase usecase.IUserUseCase
 }
 
-func NewResolver(taskUseCase usecase.ITaskUseCase) *Resolver {
+func NewResolver(taskUseCase usecase.ITaskUseCase, userUseCase usecase.IUserUseCase) *Resolver {
 	return &Resolver{
 		TaskUseCase: taskUseCase,
+		UserUseCase: userUseCase,
 	}
 }

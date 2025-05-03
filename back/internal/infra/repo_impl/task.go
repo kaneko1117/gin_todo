@@ -55,7 +55,7 @@ func (r *TaskRepo) GetTasks(userID int32) ([]*model.Task, error) {
 func (r *TaskRepo) ChangeTaskStatus(taskID int32, isChecked bool) error {
 	q := r.q
 	c := r.c
-	_ ,err:= q.WithContext(c).Task.Where(q.Task.ID.Eq(taskID)).Updates(map[string]interface{}{"IsChecked": isChecked})
+	_, err := q.WithContext(c).Task.Where(q.Task.ID.Eq(taskID)).Updates(map[string]interface{}{"IsChecked": isChecked})
 	if err != nil {
 		return errors.New("タスクの更新に失敗しました")
 	}

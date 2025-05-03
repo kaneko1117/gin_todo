@@ -4,7 +4,9 @@ go 1.23.8
 
 require (
 	github.com/99designs/gqlgen v0.17.71
+	github.com/go-chi/chi v1.5.5
 	github.com/go-playground/validator/v10 v10.26.0
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/cors v1.11.1
 	github.com/vektah/gqlparser/v2 v2.5.25

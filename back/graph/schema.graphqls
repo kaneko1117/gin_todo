@@ -5,6 +5,7 @@
 type Mutation {
   createTask(data: Todo!): Message!
   changeTaskStatus(data: ChangeStatus!): Message!
+  login(data: LoginData!): Message!
 }
 
 input Todo {
@@ -15,6 +16,11 @@ input Todo {
 input ChangeStatus {
   id: ID!
   isChecked: Boolean!
+}
+
+input LoginData {
+  userName: String!
+  password: String!
 }
 
 type Message {

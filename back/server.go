@@ -2,6 +2,7 @@ package main
 
 import (
 	"gin_todo/graph"
+	"gin_todo/graph/middlewares"
 	"gin_todo/internal/infra/database"
 	"gin_todo/internal/infra/repo_impl"
 	"gin_todo/internal/usecase"
@@ -14,6 +15,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/go-chi/chi"
 	"github.com/rs/cors"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -25,10 +27,19 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
+	router := chi.NewRouter()
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}).Handler, middlewares.MiddleWares())
 	db := database.NewDB()
 	taskRepo := repo_impl.NewTaskRepo(db)
+	userRepo := repo_impl.NewUserRepo(db)
 	taskUseCase := usecase.NewTaskUseCase(taskRepo)
-	resolver := graph.NewResolver(taskUseCase)
+	userUseCase := usecase.NewUserUseCase(userRepo)
+	resolver := graph.NewResolver(taskUseCase, userUseCase)
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
 	srv.AddTransport(transport.Options{})
@@ -42,16 +53,8 @@ func main() {
 		Cache: lru.New[string](100),
 	})
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
-	
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type", "Authorization"},
-		AllowCredentials: true,
-	})
-	handler := c.Handler(http.DefaultServeMux)
+	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	router.Handle("/query", srv)
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, handler))
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }

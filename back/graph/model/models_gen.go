@@ -7,6 +7,11 @@ type ChangeStatus struct {
 	IsChecked bool   `json:"isChecked"`
 }
 
+type LoginData struct {
+	UserName string `json:"userName"`
+	Password string `json:"password"`
+}
+
 type Message struct {
 	Msg string `json:"msg"`
 }

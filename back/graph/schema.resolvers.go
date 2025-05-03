@@ -7,9 +7,12 @@ package graph
 import (
 	"context"
 	"fmt"
+	"gin_todo/graph/middlewares"
 	"gin_todo/graph/model"
 	"gin_todo/internal/handler/dto/request"
+	"net/http"
 	"strconv"
+	"time"
 
 	validator "github.com/go-playground/validator/v10"
 )
@@ -51,7 +54,7 @@ func (r *mutationResolver) ChangeTaskStatus(ctx context.Context, data model.Chan
 	}
 	v := validator.New()
 	dto := request.ChangeTaskStatusRequest{
-		TaskID:   int32(intID),
+		TaskID:    int32(intID),
 		IsChecked: data.IsChecked,
 	}
 	if err := v.Struct(dto); err != nil {
@@ -66,6 +69,30 @@ func (r *mutationResolver) ChangeTaskStatus(ctx context.Context, data model.Chan
 		}, fmt.Errorf("Change task status error: %s", err.Error())
 	}
 	return &model.Message{Msg: "Success!"}, nil
+}
+
+// Login is the resolver for the login field.
+func (r *mutationResolver) Login(ctx context.Context, data model.LoginData) (*model.Message, error) {
+	token, err := r.UserUseCase.Login(data.UserName, data.Password)
+	if err != nil {
+		return &model.Message{
+			Msg: fmt.Sprintf("Login error: %s", err.Error()),
+		}, fmt.Errorf("Login error: %s", err.Error())
+	}
+	ca := middlewares.ForContext(ctx)
+	cookie := new(http.Cookie)
+	cookie.Name = "auth-cookie"
+	cookie.Value = token
+	cookie.Expires = time.Now().Add(2 * time.Hour)
+	cookie.Path = "/"
+	cookie.Domain = "localhost"
+
+	// HttpOnlyをtrueにすることで、JavaScriptからクッキーにアクセスできなくなる
+	cookie.HttpOnly = true
+	cookie.Secure = true
+	cookie.SameSite = http.SameSiteStrictMode
+	http.SetCookie(ca.Writer, cookie)
+	return &model.Message{Msg: "Login success!"}, nil
 }
 
 // GetTasks is the resolver for the getTasks field.
