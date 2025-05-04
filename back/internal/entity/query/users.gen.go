@@ -32,7 +32,7 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 	_user.UserName = field.NewString(tableName, "user_name")
 	_user.Password = field.NewString(tableName, "password")
 	_user.CreatedAt = field.NewTime(tableName, "created_at")
-	_user.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_user.UpdateAt = field.NewTime(tableName, "update_at")
 	_user.Tasks = userHasManyTasks{
 		db: db.Session(&gorm.Session{}),
 
@@ -52,7 +52,7 @@ type user struct {
 	UserName  field.String
 	Password  field.String
 	CreatedAt field.Time
-	UpdatedAt field.Time
+	UpdateAt  field.Time
 	Tasks     userHasManyTasks
 
 	fieldMap map[string]field.Expr
@@ -74,7 +74,7 @@ func (u *user) updateTableName(table string) *user {
 	u.UserName = field.NewString(table, "user_name")
 	u.Password = field.NewString(table, "password")
 	u.CreatedAt = field.NewTime(table, "created_at")
-	u.UpdatedAt = field.NewTime(table, "updated_at")
+	u.UpdateAt = field.NewTime(table, "update_at")
 
 	u.fillFieldMap()
 
@@ -96,7 +96,7 @@ func (u *user) fillFieldMap() {
 	u.fieldMap["user_name"] = u.UserName
 	u.fieldMap["password"] = u.Password
 	u.fieldMap["created_at"] = u.CreatedAt
-	u.fieldMap["updated_at"] = u.UpdatedAt
+	u.fieldMap["update_at"] = u.UpdateAt
 
 }
 

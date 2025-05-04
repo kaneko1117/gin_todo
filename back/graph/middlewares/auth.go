@@ -18,7 +18,6 @@ type contextKey struct {
 type User struct {
 	Writer     http.ResponseWriter
 	UserName string `json:"username"`
-	Password string `json:"password"`
 }
 
 func MiddleWares() func(http.Handler) http.Handler {
@@ -28,7 +27,6 @@ func MiddleWares() func(http.Handler) http.Handler {
 			if err != nil || c == nil {
 				ctx := context.WithValue(r.Context(), userCtxKey, &User{
 					UserName: "",
-					Password: "",
 					Writer:   w,
 				})
 				r = r.WithContext(ctx)
@@ -52,10 +50,8 @@ func MiddleWares() func(http.Handler) http.Handler {
 				return
 			}
 			userName := claims["username"].(string)
-			password := claims["password"].(string)
 			ctx := context.WithValue(r.Context(), userCtxKey, &User{
 				UserName: userName,
-				Password: password,
 				Writer:   w,
 			})
 			r = r.WithContext(ctx)

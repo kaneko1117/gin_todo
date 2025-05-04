@@ -33,10 +33,11 @@ func main() {
 	}
 
 	userData := model.User{
+		ID:       1,
 		UserName:  "admin",
 		Password:  string(pw),
 		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		UpdateAt: time.Now(),
 	}
 	err = query.User.Create(&userData)
 	if err != nil {
@@ -45,6 +46,7 @@ func main() {
 	}
 
 	taskData := model.Task{
+		ID:       1,
 		UserID:    userData.ID,
 		Tasks:     "洗濯物を干す",
 		CreatedAt: time.Now(),
