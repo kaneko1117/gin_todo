@@ -36,7 +36,7 @@ export const TodoListForm = ({ refetch }: Props) => {
       variables: {
         data: {
           tasks: task,
-          id: 2,
+          id: 1,
         },
       },
     });

@@ -20,7 +20,7 @@ export const TodoList = () => {
     TodosQuery,
     {
       variables: {
-        id: 2,
+        id: 1,
       },
     }
   );

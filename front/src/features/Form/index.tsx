@@ -1,19 +1,45 @@
 "use client";
-import { useActionState } from "react";
+
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
-import { loginUser } from "@/app/action";
+import { gql, useMutation } from "@apollo/client";
 
-const initialState = {
-  message: "",
+const LOGIN = gql(
+  `
+  mutation Login($data: LoginData!) {
+    login(data: $data) {
+      msg
+    }
+  }
+`
+);
+
+type Response = {
+  msg: string;
 };
 
 export const Form = () => {
-  const [state, formAction, pending] = useActionState(loginUser, initialState);
+  const router = useRouter();
+  const [login, { loading, error }] = useMutation<Response>(LOGIN);
+
+  const loginFormData = async (formData: FormData) => {
+    const username = formData.get("username");
+    const password = formData.get("password");
+    await login({
+      variables: {
+        data: {
+          userName: username,
+          password: password,
+        },
+      },
+    });
+    router.push("/todo");
+  };
   return (
     <form
       className="flex flex-col items-center justify-center gap-5 h-screen"
-      action={formAction}
+      action={loginFormData}
     >
       <Input
         type="text"
@@ -29,10 +55,14 @@ export const Form = () => {
         id="password"
         name="password"
       />
-      <Button type="submit" disabled={pending} className="cursor-pointer">
+      <Button type="submit" disabled={loading} className="cursor-pointer">
         ログイン
       </Button>
-      <p className="text-red-500 h-6">{state.message}</p>
+      {error && (
+        <div className="mt-2">
+          <p className="text-red-500">ログインに失敗しました</p>
+        </div>
+      )}
     </form>
   );
 };
