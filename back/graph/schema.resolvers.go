@@ -97,7 +97,10 @@ func (r *mutationResolver) Login(ctx context.Context, data model.LoginData) (*mo
 
 // GetTasks is the resolver for the getTasks field.
 func (r *queryResolver) GetTasks(ctx context.Context, id string) ([]*model.Tasks, error) {
-	fmt.Println("GetTasks called", id)
+	raw := middlewares.ForContext(ctx)
+	if raw.UserName == "" {
+		return nil, fmt.Errorf("ログインしていません")
+	}
 	intID, err := strconv.ParseInt(id, 10, 32)
 	if err != nil {
 		return nil, fmt.Errorf("ID is not a number: %s", id)
