@@ -11,7 +11,7 @@ const client = new ApolloClient({
 export default function Login() {
   return (
     <ApolloProvider client={client}>
-      <Form />;
+      <Form />
     </ApolloProvider>
   );
 }
