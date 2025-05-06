@@ -24,8 +24,9 @@ export const TodoList = () => {
       },
     }
   );
-  if (loading || !data) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
+  if (!data) return <p>No data found</p>;
   return (
     <div className="flex flex-col items-center gap-5 h-screen mt-12">
       <div className="w-[500px]">
