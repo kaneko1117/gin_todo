@@ -24,17 +24,21 @@ export const Form = () => {
   const [login, { loading, error }] = useMutation<Response>(LOGIN);
 
   const loginFormData = async (formData: FormData) => {
-    const username = formData.get("username");
-    const password = formData.get("password");
-    await login({
-      variables: {
-        data: {
-          userName: username,
-          password: password,
+    try {
+      const username = formData.get("username");
+      const password = formData.get("password");
+      await login({
+        variables: {
+          data: {
+            userName: username,
+            password: password,
+          },
         },
-      },
-    });
-    router.push("/todo");
+      });
+      router.push("/todo");
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
   };
   return (
     <form
