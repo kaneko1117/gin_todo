@@ -2,10 +2,9 @@
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { TodoList } from "@/features/TodoList";
-import { TodoData } from "@/features/TodoList/type";
 
 const client = new ApolloClient({
-  uri: "http://localhost:8080/query",
+  uri: "http://localhost/back/query",
   cache: new InMemoryCache(),
 });
 

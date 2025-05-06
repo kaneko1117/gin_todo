@@ -32,15 +32,19 @@ export const TodoListForm = ({ refetch }: Props) => {
     useMutation<Response>(REGISTER_TASK);
   const registerFormData = async (formData: FormData) => {
     const task = formData.get("task");
-    await registerTask({
-      variables: {
-        data: {
-          tasks: task,
-          id: 2,
+    try {
+      await registerTask({
+        variables: {
+          data: {
+            tasks: task,
+            id: 1,
+          },
         },
-      },
-    });
-    await refetch();
+      });
+      await refetch();
+    } catch (error) {
+      console.error("Error creating task:", error);
+    }
   };
 
   return (
